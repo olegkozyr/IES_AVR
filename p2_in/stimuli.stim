@@ -1,0 +1,7 @@
+// Set PIN2 (INT0) high and low repeatedly
+$repeat 2000000
+    PIND |= 0x04
+    #200
+    PIND = 0x00
+    #200
+$endrep
