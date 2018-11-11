@@ -61,8 +61,8 @@
 * 
 */
 
-#include <avr/io.h>
 #define F_CPU            1000000UL                     /* Тактова частота процесору. */
+#include <avr/io.h>
 #include <avr/interrupt.h>
 
 #define DIGIT_1          (1<<PB0)                      /* Активується 1-й індикатор. */
@@ -98,7 +98,7 @@ static uint8_t k = 0;                                  /* Лічильник циклу повтор
 ISR(TIMER1_COMPA_vect)
 {
 	PORTB = digits[i];                                 /* Активація i-го індикатору. 
-	PORTD = number_code[j+i];                          /* Вивід j+i числа на i-й індикатор. 
+	PORTD = number_code[j+i];                          /* Вивід цифри на i-й індикатор. 
 
 	if(i < DIGIT_COUNT)                                /* Доки поточний номер індикатору не досяг 
 	                                                      останнього. 
@@ -139,10 +139,10 @@ int main04(void)
 	/* Ініціалізація вихідних 12 виводів. */
 	PORTB = 0x00;
 	PORTD = 0x00;
-	DDRB = 0x0F;
-	DDRD = 0xFF;
+	DDRB = 0x0F;                                       /* Виводи для вибору індикатору. */
+	DDRD = 0xFF;                                       /* Виводи для виводу цифр на індикатор. */
 	
-    /* Налаштування тамеру 1. */
+    /* Налаштування таймеру 1. */
     CLEAR_TIMER;                                                                           
 	OCR1A = TIMER_COUNT;                               /* Кількість тактів лічильника. */
 	TIMSK1 |= (1<<OCIE1A);                             /* Активація TIMER1_COMPA переривання. */
