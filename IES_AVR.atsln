@@ -9,6 +9,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "p2_in", "p2_in\p2_in.cproj"
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "p3_interrupts", "p3_interrupts\p3_interrupts.cproj", "{D992904C-4773-4A7F-A366-9A575946C1AD}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "p4_adc", "p4_adc\p4_adc.cproj", "{F9077FE1-814E-4604-BF1B-BBAFA070FFCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -27,6 +29,10 @@ Global
 		{D992904C-4773-4A7F-A366-9A575946C1AD}.Debug|AVR.Build.0 = Debug|AVR
 		{D992904C-4773-4A7F-A366-9A575946C1AD}.Release|AVR.ActiveCfg = Release|AVR
 		{D992904C-4773-4A7F-A366-9A575946C1AD}.Release|AVR.Build.0 = Release|AVR
+		{F9077FE1-814E-4604-BF1B-BBAFA070FFCD}.Debug|AVR.ActiveCfg = Debug|AVR
+		{F9077FE1-814E-4604-BF1B-BBAFA070FFCD}.Debug|AVR.Build.0 = Debug|AVR
+		{F9077FE1-814E-4604-BF1B-BBAFA070FFCD}.Release|AVR.ActiveCfg = Release|AVR
+		{F9077FE1-814E-4604-BF1B-BBAFA070FFCD}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
