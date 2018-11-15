@@ -1,7 +1,7 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#define F_CPU              1000000UL                   /* Тактова частота процесору. */
+#define F_CPU              1000000UL                   /* Тактова частота процесора. */
 #include <avr/io.h>
 #include <util/delay.h>
 

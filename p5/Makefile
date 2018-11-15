@@ -1,4 +1,4 @@
-PRG            = program02
+PRG            = program04
 OBJ            = $(PRG).o
 
 MCU_TARGET     = atmega168
