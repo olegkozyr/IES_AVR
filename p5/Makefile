@@ -1,5 +1,8 @@
-PRG            = program04
-OBJ            = $(PRG).o
+PRG              = program05
+PRG_M            = $(PRG)_m
+PRG_S            = $(PRG)_s
+OBJ_M            = $(PRG_M).o
+OBJ_S            = $(PRG_S).o
 
 MCU_TARGET     = atmega168
 
@@ -13,16 +16,18 @@ OBJCOPY        = "C:\avr8-gnu-toolchain-3.6.1.1752-win32.any.x86\avr8-gnu-toolch
 
 override CFLAGS        = -g -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET)
 
-all: $(PRG).elf $(PRG).hex
+all: $(PRG_M).elf $(PRG_M).hex $(PRG_S).elf $(PRG_S).hex
 
-# dependency:
-$(OBJ): lcd.c lcd.h
-
-#$(PRG).elf: $(OBJ)
-$(PRG).elf: $(OBJ) lcd.o
+$(PRG_M).elf: $(OBJ_M)
 	$(CC) $(CFLAGS) -o $@ $^
 
-$(PRG).hex: $(PRG).elf
+$(PRG_M).hex: $(PRG_M).elf
+	$(OBJCOPY) -j .text -j .data -O ihex $< $@
+	
+$(PRG_S).elf: $(OBJ_S)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(PRG_S).hex: $(PRG_S).elf
 	$(OBJCOPY) -j .text -j .data -O ihex $< $@
 
 
