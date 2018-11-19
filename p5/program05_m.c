@@ -1,17 +1,26 @@
 /*
-* Програма 5.0. Робота з spi інтерфейсом.
+* Програма 5. Робота з SPI інтерфейсом в режимі Master.
 *
-* Призначення програми: передача байту інформації між 
-* двома мікроконтролерами по SPI інтерфейсу та 
-* відображення переданого байту за допомогою світлодіодів.
+* Призначення програми: зчитування байту із порту D та 
+* передача його по інтерфейсу SPI на інший контролер 
+* для відображення. 
 *
 * Даний вихідний код завантажується в керуючий контролер.
 *
 * Обладнання:
 * - мікроконтролер ATmega168;
-* - набір із восьми логічних ключів DIPSWC_8.
+* - набір із восьми логічних ключів LOGICTOGGLE.
 *
-*
+* З'єднання виводів мікроконтролеру:
+* Виводи приймання інформації:
+* - виводи PD0-PD7 порту D - приєднані до восьми 
+*   логічних ключів;
+* Передавання інформації по шині SPI:
+*   Master    Slave
+* - MOSI   :  MOSI;
+* - MISO   :  MISO;
+* - SCK    :  SCK ;
+* - SS     :  SS  ;
 *
 */
 
@@ -19,33 +28,42 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define MOSI               DDB3
-#define SCK                DDB5
-#define SS                 DDB2
+#define SS                 PB2                         /* Вивід дозволяє/забороняє передавання даних
+                                                          по шині:
+														  - 1 - передавання даних заборонене;
+														  - 0 - дозволяє передавання даних. */
+#define MOSI               PB3                         /* Вивід для передачі байту інформації до
+                                                          Slave контролеру. */
+#define SCK                PB5                         /* Вивід для передачі синхро-імпульсів. */
+
+#define LOGIC_KEY_STATES   PIND                        /* Стан логічних ключів на вході порту D. */
 
 /* Ініціалізація виводів мікроконтролеру ATmega168. */
 void port_init(void)
 {
-    /* Входи для передачі байту. */
+    /* Входи для зчитування байту інформації. */
 	DDRD = 0x00;
 	
 	/* Ініціалізація SPI інтерфейсу. */
-	
-    DDRB = (1<<MOSI)|(1<<SCK)|(1<<SS);                 /*   Set MOSI and SCK output, all others input */
-	PORTB = 0x00;
-    SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);               /* Enable SPI, Master, set clock rate fck/16 */
-	SPDR = 0x00;
+    DDRB = (1<<MOSI)|(1<<SCK)|(1<<SS);                 /* Встановлення виводів SPI шини:
+                                                          - MOSI SCK SS - на вихід;
+														  - MISO - на вхід. */
+	PORTB = 0x00;                                      /* На вивід SS подається 0. */
+    SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);               /* SPE - Активація SPI шини;
+                                                          MSTR - контролер пряцює в режимі Master;
+                                                          SPR0 - подільник частоти - 16 */
+	/* Очищення SPIF прапорця за рахунок зчитування 
+	   SPSR та SPDR регістрів. */
+	volatile uint8_t tempByte;
+	tempByte = SPSR;
+	tempByte = SPDR;
 }
 
-void spi_transmit(uint8_t byte)
+/* Передача байту по шині SPI. */
+void spi_transmit_byte(uint8_t byte)
 {
-    SPDR = byte;                                       /* Start transmission */
-    /* Wait for transmission complete */
-    while(!(SPSR & (1<<SPIF)));
-	//uint8_t temp = SPSR;
-	//temp = SPDR;
-	//temp++;
-	//SPSR &= ~(1<<SPIF);
+    SPDR = byte;                                       /* Початок передачі байту. */
+	while(!(SPSR & (1<<SPIF)));                        /* Чекаємо закінчення передачі. */
 }
 
 int main(void)
@@ -54,7 +72,7 @@ int main(void)
 	
     while (1)
     {
-		spi_transmit(PIND);
+		spi_transmit_byte(LOGIC_KEY_STATES);
 		_delay_ms(100);
     }
 }

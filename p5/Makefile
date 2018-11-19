@@ -30,5 +30,6 @@ $(PRG_S).elf: $(OBJ_S)
 $(PRG_S).hex: $(PRG_S).elf
 	$(OBJCOPY) -j .text -j .data -O ihex $< $@
 
-
+clean:
+	rm -rf *.o *.elf *.hex
 
