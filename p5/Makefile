@@ -1,4 +1,4 @@
-PRG              = program05
+PRG              = program06
 PRG_M            = $(PRG)_m
 PRG_S            = $(PRG)_s
 OBJ_M            = $(PRG_M).o
